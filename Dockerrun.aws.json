@@ -5,29 +5,25 @@
       "name": "client",
       "image": "sherondale/multi-docker-client",
       "hostname": "client",
-      "essential": false,
-      "memory": 128
+      "essential": false
     },
     {
       "name": "server",
       "image": "sherondale/multi-docker-server",
       "hostname": "api",
-      "essential": false,
-      "memory": 128
+      "essential": false
     },
     {
       "name": "worker",
       "image": "sherondale/multi-docker-worker",
       "hostname": "worker",
-      "essential": false,
-      "memory": 128
+      "essential": false
     },
     {
       "name": "nginx",
       "image": "sherondale/multi-docker-nginx",
       "hostname": "nginx",
       "essential": true,
-      "memory": 128,
       "portMappings": [
         {
           "hostPort": 80,
