@@ -1,0 +1,20 @@
+sudo: required
+servies:
+  - docker
+
+before_install:
+  - docker build -t sherondale/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run sherondale/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t sherondale/multi-docker-client ./client
+  - docker build -t sherondale/multi-docker-nginx ./nginx
+  - docker build -t sherondale/multi-docker-server ./server
+  - docker build -t sherondale/multi-docker-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push sherondale/multi-docker-client
+  - docker push sherondale/multi-docker-nginx
+  - docker push sherondale/multi-docker-server
+  - docker push sherondale/multi-docker-worker
