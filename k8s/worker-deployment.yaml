@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-docker-worker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multi-docker-worker
+  template:
+    metadata:
+      labels:
+        app: multi-docker-worker
+    spec:
+      containers:
+        - name: multi-docker-worker
+          image: sherondale/multi-docker-worker
+          env:
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
+            - name: REDIS_PORT
+              value: "6379"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
