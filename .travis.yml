@@ -1,25 +1,28 @@
 sudo: required
 servies:
   - docker
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_003b3e01c5f5_key -iv $encrypted_003b3e01c5f5_iv -in multi-docker.json.enc -out multi-docker.json -d
   - curl https://sdk.cloud.google.com | bash > /dev/null;
   - source $HOME/google-could-sdk/path.bash.inc
   - gcloud components update kubectl
-  - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud auth activate-service-account --key-file multi-docker.json
+  - gcloud config set project multi-docker-234713
+  - gcloud config set compute/zone us-central1-a
+  - gcloud container clusters get-credentials multi-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker build -t sherondale/react-test -f ./client/Dockerfile.dev ./client
 
 script:
   - docker run sherondale/react-test npm test -- --coverage
 
-after_success:
-  - docker build -t sherondale/multi-docker-client ./client
-  - docker build -t sherondale/multi-docker-nginx ./nginx
-  - docker build -t sherondale/multi-docker-server ./server
-  - docker build -t sherondale/multi-docker-worker ./worker
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push sherondale/multi-docker-client
-  - docker push sherondale/multi-docker-nginx
-  - docker push sherondale/multi-docker-server
-  - docker push sherondale/multi-docker-worker
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
