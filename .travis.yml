@@ -19,7 +19,7 @@ before_install:
   - docker build -t sherondale/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run sherondale/react-test npm test -- --coverage
+  - ls
 
 deploy:
   provider: script
