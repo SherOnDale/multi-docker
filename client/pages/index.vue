@@ -1,8 +1,8 @@
 <template>
   <section class="container">
     <div>
-      <h1 class="title">portfolio</h1>
-      <h2 class="subtitle">My Portfolio</h2>
+      <h1 class="title">Sherin Binu</h1>
+      <h2 class="subtitle">Welcome to my Portfolio :)</h2>
     </div>
   </section>
 </template>
@@ -13,7 +13,7 @@
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   text-align: center;
 }
 
